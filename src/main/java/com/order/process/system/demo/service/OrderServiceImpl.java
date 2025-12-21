@@ -26,15 +26,13 @@ public class OrderServiceImpl implements OrderService{
     @Autowired
     InventoryServiceImpl inventoryServive;
     @Autowired
-    ItemRepository itemRepository;
-    @Autowired
     ItemServiceImpl itemService;
     @Autowired
     ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public OrderResponse createOrder(CreateOrderRequest request){
-        HashMap<Item,Integer> issueItems = new HashMap<>();
+        HashMap<Item,String> issueItems = new HashMap<>();
         List<ItemRequest> available = request.getItems().stream()
                 .filter(i -> {
                     Inventory inv = inventoryServive.findByItemId(i.getId());
@@ -43,7 +41,7 @@ public class OrderServiceImpl implements OrderService{
                         return true;
                     }else{
                         Item item = itemService.findById(i.getId());
-                        issueItems.put(item, Math.abs(inv.getQty() - i.getQty()));
+                        issueItems.put(item, "Only " + inv.getQty() +" are available");
                         return false;
                     }
 
@@ -60,9 +58,7 @@ public class OrderServiceImpl implements OrderService{
             order.setOrderItems(new ArrayList<>());
             Order orderCreated = orderRepository.save(order);
             if(orderCreated.getId() > -1){
-                request.getItems().forEach( i -> {
-                    eventPublisher.publishEvent(new CreateOrderEvent(this, orderCreated, i));
-                });
+                    eventPublisher.publishEvent(new CreateOrderEvent(this, orderCreated, request.getItems()));
             }
             return (new OrderCreatedResponse(order.getId(), order.getStatus()));
         }

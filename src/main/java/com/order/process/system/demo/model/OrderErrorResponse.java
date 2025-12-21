@@ -11,6 +11,6 @@ import java.util.HashMap;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderErrorResponse  implements OrderResponse{
-    HashMap<Item, Integer> items;
+    HashMap<Item, String> items;
     String errorMessage;
 }

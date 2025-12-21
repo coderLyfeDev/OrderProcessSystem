@@ -20,12 +20,14 @@ public class InventoryServiceImpl implements InventoryServive{
 
     @EventListener
     public void decreaseInventory(CreateOrderEvent event){
-        Inventory inventory = inventoryRepository.findByItemId(event.getItemRequest().getId());
-        inventory.setQty(inventory.getQty() - event.getItemRequest().getQty());
-        Inventory inventoryUpdated = inventoryRepository.save(inventory);
-        String updatedMessage = "Inventory for item "+event.getItemRequest().getId()
-                + " has been update to "+ inventoryUpdated.getQty() + " because of order " + event.getOrder().getId();
-        System.out.println(updatedMessage);
+        event.getItemRequest().forEach( i -> {
+            Inventory inventory = inventoryRepository.findByItemId(i.getId());
+            inventory.setQty(inventory.getQty() - i.getQty());
+            Inventory inventoryUpdated = inventoryRepository.save(inventory);
+            String updatedMessage = "Inventory for item "+i.getId()
+                    + " has been update to "+ inventoryUpdated.getQty() + " because of order " + event.getOrder().getId();
+            System.out.println(updatedMessage);
+        });
 
     }
 

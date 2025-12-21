@@ -3,15 +3,15 @@ package com.order.process.system.demo.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.order.process.system.demo.model.ItemRequest;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "order_item")
+@EqualsAndHashCode(exclude = {"order", "item"})
+@ToString(exclude = {"order", "item"})
 public class OrderItem {
 
     @Id

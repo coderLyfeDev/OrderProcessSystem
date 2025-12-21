@@ -22,12 +22,17 @@ public class OrderItemServiceImpl implements OrderItemService{
 
     @EventListener
     private void createOrderItem(CreateOrderEvent event) {
-        Item itemDTO = itemService.findById(event.getItemRequest().getId());
-        OrderItem  orderItem = new OrderItem();
-        orderItem.setOrder(event.getOrder());
-        orderItem.setItem(itemDTO);
-        orderItem.setQty(event.getItemRequest().getQty());
-        createOrderItem(orderItem);
-        System.out.println("Creating orderItem for item "+event.getItemRequest().getId() + " as part of order "+ event.getOrder().getId());
+
+        event.getItemRequest().forEach(i -> {
+            Item itemDTO = itemService.findById(i.getId());
+            OrderItem  orderItem = new OrderItem();
+            orderItem.setOrder(event.getOrder());
+            orderItem.setItem(itemDTO);
+            orderItem.setQty(i.getQty());
+            createOrderItem(orderItem);
+            System.out.println("Creating orderItem for item "+i.getId() + " as part of order "+ event.getOrder().getId());
+        });
+
+
     }
 }
