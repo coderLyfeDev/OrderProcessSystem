@@ -38,6 +38,7 @@ public class OrdersController {
     public ResponseEntity<OrderStatusResponse> getOrderStatus(@Valid @PathVariable Long id){
         OrderStatusResponse response = orderService.findOrderById(id);
         if(response.getOrder() == null){
+
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(response);
         }else{
