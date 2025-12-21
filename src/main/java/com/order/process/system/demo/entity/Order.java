@@ -1,5 +1,6 @@
 package com.order.process.system.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.order.process.system.demo.model.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,15 +17,17 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "orders")
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "orderId")
+    @Column(name = "order_id")
     private Long id;
 
     private int customerId;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> orderItems = new ArrayList<>();  // ✅ Changed to OrderItem
+    @JsonIgnore
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Status status;

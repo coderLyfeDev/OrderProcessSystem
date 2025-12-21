@@ -5,10 +5,10 @@ import com.order.process.system.demo.entity.Item;
 import com.order.process.system.demo.entity.Order;
 import com.order.process.system.demo.entity.OrderItem;
 import com.order.process.system.demo.model.*;
-import com.order.process.system.demo.repository.InventoryRepository;
 import com.order.process.system.demo.repository.ItemRepository;
 import com.order.process.system.demo.repository.OrderItemRepository;
 import com.order.process.system.demo.repository.OrderRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService{
@@ -30,7 +29,7 @@ public class OrderServiceImpl implements OrderService{
     ItemRepository itemRepository;
 
 
-    public OrderResponse createOrder(OrderRequest request){
+    public OrderResponse createOrder(CreateOrderRequest request){
 
 
         HashMap<Item,Integer> issueItems = new HashMap<>();
@@ -76,4 +75,20 @@ public class OrderServiceImpl implements OrderService{
         orderItemRepository.save(orderItem);
 
     }
+
+    public OrderStatusResponse findOrderById(@Valid Long id) {
+        Order order = orderRepository.findById(id).orElse(null);
+        OrderStatusResponse orderStatusResponse = new OrderStatusResponse();
+        if(order == null){
+            orderStatusResponse.setMessage("No order with id: "+id+" was found.");
+        }else{
+            orderStatusResponse.setOrder(new OrderDto(order.getId(),
+                    order.getCustomerId(), order.getStatus(),
+                    order.getOrderItems()));
+            orderStatusResponse.setMessage("Order retrieved and has a status of: "+order.getStatus());
+        }
+        return orderStatusResponse;
+    }
+
+
 }

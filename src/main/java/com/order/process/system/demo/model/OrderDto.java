@@ -1,8 +1,8 @@
 package com.order.process.system.demo.model;
 
+import com.order.process.system.demo.entity.OrderItem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderRequest {
+public class OrderDto {
+    private Long id;
     private int customerId;
-    @Getter
-    private List<ItemRequest> items;
-
+    private Status status;
+    private List<OrderItem> items;
 }
