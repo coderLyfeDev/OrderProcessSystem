@@ -15,4 +15,12 @@ public class InventoryServiceImpl implements InventoryServive{
     public Inventory findByItemId(Long id){
         return inventoryRepository.findByItemId(id);
     }
+
+    public void updateInventory(Long id, int amount, String change){
+        Inventory inventory = inventoryRepository.findByItemId(id);
+        inventory.setQty(change.equals("+")
+                        ? inventory.getQty() + amount
+                        : inventory.getQty() - amount);
+        inventoryRepository.save(inventory);
+    }
 }

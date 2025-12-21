@@ -8,6 +8,7 @@ import com.order.process.system.demo.model.*;
 import com.order.process.system.demo.repository.ItemRepository;
 import com.order.process.system.demo.repository.OrderItemRepository;
 import com.order.process.system.demo.repository.OrderRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,11 +28,11 @@ public class OrderServiceImpl implements OrderService{
     OrderItemRepository orderItemRepository;
     @Autowired
     ItemRepository itemRepository;
+    @Autowired
+    ItemServiceImpl itemService;
 
-
+    @Transactional
     public OrderResponse createOrder(CreateOrderRequest request){
-
-
         HashMap<Item,Integer> issueItems = new HashMap<>();
         List<ItemRequest> available = request.getItems().stream()
                 .filter(i -> {
@@ -40,7 +41,7 @@ public class OrderServiceImpl implements OrderService{
                     if(orderItem){
                         return true;
                     }else{
-                        Item item = itemRepository.findById(i.getId()).get();
+                        Item item = itemService.findById(i.getId());
                         issueItems.put(item, Math.abs(inv.getQty() - i.getQty()));
                         return false;
                     }
@@ -60,14 +61,14 @@ public class OrderServiceImpl implements OrderService{
             if(orderCreated.getId() > -1){
                 request.getItems().forEach( i -> {
                     createOrderItem(orderCreated, i);
+                    inventoryServive.updateInventory(i.getId(),i.getQty(),"-");
                 });
             }
             return (new OrderCreatedResponse(order.getId(), order.getStatus()));
         }
     }
-
     private void createOrderItem(Order order, ItemRequest item) {
-        Item itemDTO = itemRepository.findById(item.getId()).get();
+        Item itemDTO = itemService.findById(item.getId());
         OrderItem  orderItem = new OrderItem();
         orderItem.setOrder(order);
         orderItem.setItem(itemDTO);
@@ -91,4 +92,20 @@ public class OrderServiceImpl implements OrderService{
     }
 
 
+    public UpdateStatusResponse updateOrderStatus(@Valid Long id) {
+        Order order = orderRepository.findById(id).orElse(null);
+        Status current = order.getStatus();
+        Status next = current.next();
+        order.setStatus(next);
+
+
+        if(order == null){
+            return new UpdateStatusResponse(2, "No order found for order ID: "+id);
+        }else if(order.getStatus() == null){
+            return new UpdateStatusResponse(3,"Order has already been completed for order with ID: "+id);
+        }else{
+            orderRepository.save(order);
+            return new UpdateStatusResponse(1,"Status has been updated to: "+next.getLabel());
+        }
+    }
 }

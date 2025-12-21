@@ -2,6 +2,7 @@ package com.order.process.system.demo.controller;
 
 import com.order.process.system.demo.entity.Order;
 import com.order.process.system.demo.model.*;
+import com.order.process.system.demo.service.InventoryServiceImpl;
 import com.order.process.system.demo.service.OrderServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/order")
+@CrossOrigin("*")
 public class OrdersController {
 
     @Autowired
@@ -32,7 +34,7 @@ public class OrdersController {
 
     }
 
-    @GetMapping("get/OrderStatus/{id}")
+    @GetMapping("/get/OrderStatus/{id}")
     public ResponseEntity<OrderStatusResponse> getOrderStatus(@Valid @PathVariable Long id){
         OrderStatusResponse response = orderService.findOrderById(id);
         if(response.getOrder() == null){
@@ -41,5 +43,18 @@ public class OrdersController {
         }else{
             return ResponseEntity.ok(response);
         }
+    }
+
+    @PutMapping("/updateStatus/{orderId}")
+    public ResponseEntity<UpdateStatusResponse> updateOrderStatus(@Valid @PathVariable Long orderId){
+        UpdateStatusResponse response = orderService.updateOrderStatus(orderId);
+        if(response.getCode() == 1){
+            return ResponseEntity.ok(response);
+        }else if(response.getCode() == 2){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }else{
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        }
+
     }
 }

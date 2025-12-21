@@ -1,18 +1,31 @@
 package com.order.process.system.demo.model;
 
 public enum Status {
-    PENDING("PENDING"),
-    PAID("PAID"),
-    COMPLETED("COMPLETED");
+    PENDING(0, "PENDING"),
+    PAID(1, "PAID"),
+    COMPLETED(2, "COMPLETED");
 
     private final String label;
+    private final int code;
 
-    Status(String label) {
+    Status(int code, String label) {
         this.label = label;
+        this.code = code;
     }
 
     public String getLabel() {
         return label;
     }
 
+    public int getCode() {
+        return code;
+    }
+
+    public Status next() {
+        if (values().length > ordinal() + 1) {
+            return values()[ordinal() + 1];
+        }else{
+            return null;
+        }
+    }
 }
