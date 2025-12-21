@@ -32,6 +32,10 @@ public class OrderServiceImpl implements OrderService{
 
     @Transactional
     public OrderResponse createOrder(CreateOrderRequest request){
+        if(!checkRequestInput(request) ){
+            return new IncompleteOrderResponse("Order cannot be created as is. Customer ID must be greater than 0 " +
+                    "\n and all items must have have a quantity of 1 or more.");
+        }
         HashMap<Item,String> issueItems = new HashMap<>();
         List<ItemRequest> available = request.getItems().stream()
                 .filter(i -> {
@@ -57,11 +61,27 @@ public class OrderServiceImpl implements OrderService{
             order.setStatus(Status.PENDING);
             order.setOrderItems(new ArrayList<>());
             Order orderCreated = orderRepository.save(order);
-            if(orderCreated.getId() > -1){
-                    eventPublisher.publishEvent(new CreateOrderEvent(this, orderCreated, request.getItems()));
-            }
+
+            //publish event once the order is created
+            eventPublisher.publishEvent(new CreateOrderEvent(this, orderCreated, request.getItems()));
+
             return (new OrderCreatedResponse(order.getId(), order.getStatus()));
         }
+    }
+
+    private boolean checkRequestInput(CreateOrderRequest request) {
+
+        if (request == null) return false;
+
+        if (request.getCustomerId() <= 0) return false;
+
+        if (request.getItems() == null || request.getItems().isEmpty()) return false;
+
+        return request.getItems().stream().allMatch(item ->
+                item != null &&
+                        item.getId() != null &&
+                        item.getQty() > 0
+        );
     }
 
     public OrderStatusResponse findOrderById(@Valid Long id) {
@@ -81,16 +101,19 @@ public class OrderServiceImpl implements OrderService{
 
     public UpdateStatusResponse updateOrderStatus(@Valid Long id) {
         Order order = orderRepository.findById(id).orElse(null);
-        Status current = order.getStatus();
-        Status next = current.next();
-        order.setStatus(next);
 
+        Status next = null;
+        if(order != null) {
+            Status current = order.getStatus();
+             next = current.next();
+        }
 
         if(order == null){
             return new UpdateStatusResponse(2, "No order found for order ID: "+id);
-        }else if(order.getStatus() == null){
+        }else if(next == null){
             return new UpdateStatusResponse(3,"Order has already been completed for order with ID: "+id);
         }else{
+            order.setStatus(next);
             orderRepository.save(order);
             return new UpdateStatusResponse(1,"Status has been updated to: "+next.getLabel());
         }

@@ -3,6 +3,7 @@ package com.order.process.system.demo.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.order.process.system.demo.model.ItemRequest;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 @Entity
@@ -18,7 +19,6 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_item_id")
     private Long id;
-
     private int qty;
 
     @JsonIgnore

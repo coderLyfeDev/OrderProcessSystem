@@ -166,6 +166,15 @@ public class OrderManagementUI extends JFrame {
                 return;
             }
 
+            // Check if any item has an empty quantity
+            for (ItemRow row : itemRows) {
+                String qty = row.getQuantity();
+                if (qty.isEmpty()) {
+                    responseArea.setText("Error: All items must have a quantity");
+                    return; // Stop submission
+                }
+            }
+
             // Build items JSON
             StringBuilder itemsJson = new StringBuilder("[");
             boolean first = true;
@@ -202,6 +211,7 @@ public class OrderManagementUI extends JFrame {
             responseArea.setText("Error: " + e.getMessage());
         }
     }
+
 
     private void getOrder() {
         try {

@@ -3,6 +3,10 @@ package com.order.process.system.demo.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.order.process.system.demo.model.Status;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -22,7 +26,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Long id;
-
+    @Min(value = 1, message = "customerId must be greater than 0")
     private int customerId;
 
     @JsonIgnore

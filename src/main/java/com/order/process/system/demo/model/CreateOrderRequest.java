@@ -14,5 +14,4 @@ public class CreateOrderRequest {
     private int customerId;
     @Getter
     private List<ItemRequest> items;
-
 }
