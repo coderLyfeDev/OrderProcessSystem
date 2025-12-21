@@ -6,7 +6,6 @@ import com.order.process.system.demo.entity.Order;
 import com.order.process.system.demo.entity.OrderItem;
 import com.order.process.system.demo.model.*;
 import com.order.process.system.demo.repository.ItemRepository;
-import com.order.process.system.demo.repository.OrderItemRepository;
 import com.order.process.system.demo.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -25,7 +24,7 @@ public class OrderServiceImpl implements OrderService{
     @Autowired
     InventoryServiceImpl inventoryServive;
     @Autowired
-    OrderItemRepository orderItemRepository;
+    OrderItemServiceImpl orderItemService;
     @Autowired
     ItemRepository itemRepository;
     @Autowired
@@ -67,13 +66,14 @@ public class OrderServiceImpl implements OrderService{
             return (new OrderCreatedResponse(order.getId(), order.getStatus()));
         }
     }
+
     private void createOrderItem(Order order, ItemRequest item) {
         Item itemDTO = itemService.findById(item.getId());
         OrderItem  orderItem = new OrderItem();
         orderItem.setOrder(order);
         orderItem.setItem(itemDTO);
         orderItem.setQty(item.getQty());
-        orderItemRepository.save(orderItem);
+        orderItemService.createOrderItem(orderItem);
 
     }
 
