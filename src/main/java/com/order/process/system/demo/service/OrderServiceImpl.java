@@ -4,12 +4,14 @@ import com.order.process.system.demo.entity.Inventory;
 import com.order.process.system.demo.entity.Item;
 import com.order.process.system.demo.entity.Order;
 import com.order.process.system.demo.entity.OrderItem;
+import com.order.process.system.demo.events.CreateOrderEvent;
 import com.order.process.system.demo.model.*;
 import com.order.process.system.demo.repository.ItemRepository;
 import com.order.process.system.demo.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,11 +26,11 @@ public class OrderServiceImpl implements OrderService{
     @Autowired
     InventoryServiceImpl inventoryServive;
     @Autowired
-    OrderItemServiceImpl orderItemService;
-    @Autowired
     ItemRepository itemRepository;
     @Autowired
     ItemServiceImpl itemService;
+    @Autowired
+    ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public OrderResponse createOrder(CreateOrderRequest request){
@@ -59,22 +61,11 @@ public class OrderServiceImpl implements OrderService{
             Order orderCreated = orderRepository.save(order);
             if(orderCreated.getId() > -1){
                 request.getItems().forEach( i -> {
-                    createOrderItem(orderCreated, i);
-                    inventoryServive.updateInventory(i.getId(),i.getQty(),"-");
+                    eventPublisher.publishEvent(new CreateOrderEvent(this, orderCreated, i));
                 });
             }
             return (new OrderCreatedResponse(order.getId(), order.getStatus()));
         }
-    }
-
-    private void createOrderItem(Order order, ItemRequest item) {
-        Item itemDTO = itemService.findById(item.getId());
-        OrderItem  orderItem = new OrderItem();
-        orderItem.setOrder(order);
-        orderItem.setItem(itemDTO);
-        orderItem.setQty(item.getQty());
-        orderItemService.createOrderItem(orderItem);
-
     }
 
     public OrderStatusResponse findOrderById(@Valid Long id) {

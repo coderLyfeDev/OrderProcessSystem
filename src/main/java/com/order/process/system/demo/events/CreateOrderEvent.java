@@ -1,0 +1,25 @@
+package com.order.process.system.demo.events;
+
+import com.order.process.system.demo.entity.Order;
+import com.order.process.system.demo.model.ItemRequest;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.context.ApplicationEvent;
+
+@Getter
+@Setter
+public class CreateOrderEvent extends ApplicationEvent {
+    private Order order;
+    private ItemRequest itemRequest;
+
+    public CreateOrderEvent(Object source, Order order, ItemRequest itemRequest){
+        super(source);
+        System.out.println("Creating order "+order.getId());
+        this.order = order;
+        this.itemRequest = itemRequest;
+    }
+
+
+
+}
