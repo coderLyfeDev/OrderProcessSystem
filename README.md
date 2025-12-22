@@ -34,4 +34,26 @@ It worked without that step on my mac)
    - You must have java 17+
    - In your terminal or command line, cd to backend-only
    - run java -jar demo-0.0.1-SNAPSHOT.jar
+   - I have included a export of my postman collections in the backend-only zip called OrderProcessor.postman_collection.json
+   - In case you use another tool, I will include the json request below
+     ----------------------------------- 
+     localhost:8080/order/createOrder
+       {
+       "customerId": 123,
+       "items": [
+       {
+       "id": 1,
+       "qty": 5
+       },
+       {
+       "id": 2,
+       "qty": 6
+       }
+       ]
+       }
+     ------------------------------------No json body order id is at the end of the url
+   localhost:8080/order/get/OrderStatus/1
+   --------------------------------------No json body order id is at the end of the url
+   localhost:8080/order/updateStatus/1
+   
 
