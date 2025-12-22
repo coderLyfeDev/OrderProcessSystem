@@ -6,6 +6,7 @@ import com.order.process.system.demo.events.CreateOrderEvent;
 import com.order.process.system.demo.repository.OrderItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,8 +21,9 @@ public class OrderItemServiceImpl implements OrderItemService{
         orderItemRepository.save(orderItem);
     }
 
+    @Async
     @EventListener
-    private void createOrderItem(CreateOrderEvent event) {
+    public void createOrderItem(CreateOrderEvent event) {
 
         event.getItemRequest().forEach(i -> {
             Item itemDTO = itemService.findById(i.getId());

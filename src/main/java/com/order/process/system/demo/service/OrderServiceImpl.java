@@ -3,12 +3,9 @@ package com.order.process.system.demo.service;
 import com.order.process.system.demo.entity.Inventory;
 import com.order.process.system.demo.entity.Item;
 import com.order.process.system.demo.entity.Order;
-import com.order.process.system.demo.entity.OrderItem;
 import com.order.process.system.demo.events.CreateOrderEvent;
 import com.order.process.system.demo.model.*;
-import com.order.process.system.demo.repository.ItemRepository;
 import com.order.process.system.demo.repository.OrderRepository;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,7 +27,6 @@ public class OrderServiceImpl implements OrderService{
     @Autowired
     ApplicationEventPublisher eventPublisher;
 
-    @Transactional
     public OrderResponse createOrder(CreateOrderRequest request){
         if(!checkRequestInput(request) ){
             return new IncompleteOrderResponse("Order cannot be created as is. Customer ID must be greater than 0 " +

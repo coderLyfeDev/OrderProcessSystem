@@ -5,6 +5,7 @@ import com.order.process.system.demo.events.CreateOrderEvent;
 import com.order.process.system.demo.repository.InventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,7 @@ public class InventoryServiceImpl implements InventoryServive{
         return inventoryRepository.findByItemId(id);
     }
 
+    @Async
     @EventListener
     public void decreaseInventory(CreateOrderEvent event){
         event.getItemRequest().forEach( i -> {
