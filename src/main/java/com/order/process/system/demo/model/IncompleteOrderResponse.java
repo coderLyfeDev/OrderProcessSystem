@@ -1,6 +1,5 @@
 package com.order.process.system.demo.model;
 
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemRequest {
-    private Long id;
-    @NotEmpty(message = "Must enter a quantity")
-    private int qty;
+public class IncompleteOrderResponse implements OrderResponse {
+    String message;
 }

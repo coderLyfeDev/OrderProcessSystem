@@ -3,9 +3,11 @@ package com.order.process.system.demo.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.order.process.system.demo.model.Status;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,13 +18,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "orders")
+@EqualsAndHashCode(exclude = "orderItems")
+@ToString(exclude = "orderItems")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Long id;
-
+    @Min(value = 1, message = "customerId must be greater than 0")
     private int customerId;
 
     @JsonIgnore

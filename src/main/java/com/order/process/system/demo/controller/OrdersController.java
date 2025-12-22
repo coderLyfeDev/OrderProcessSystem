@@ -23,6 +23,7 @@ public class OrdersController {
 
     @PostMapping("/createOrder")
     public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest request){
+
         OrderResponse orderResponse = orderService.createOrder(request);
 
         if(orderResponse instanceof OrderCreatedResponse){
@@ -38,6 +39,7 @@ public class OrdersController {
     public ResponseEntity<OrderStatusResponse> getOrderStatus(@Valid @PathVariable Long id){
         OrderStatusResponse response = orderService.findOrderById(id);
         if(response.getOrder() == null){
+
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(response);
         }else{
