@@ -5,6 +5,10 @@ import com.order.process.system.demo.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service layer for finding items given an item ID
+ */
+
 @Service
 public class ItemServiceImpl implements ItemService{
 

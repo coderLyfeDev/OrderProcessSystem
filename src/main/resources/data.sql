@@ -1,4 +1,7 @@
 
+
+--Queries that run on startup to populate items and their inventory in to an H2 database.
+--Database Accessible via the browser using http://localhost:8080/h2-console/login.jsp
 insert into Item(price, sku) values(4.0, 1234);
 insert into Item(price, sku) values(7.0,5476);
 insert into Item(price, sku) values(2.50, 9532);

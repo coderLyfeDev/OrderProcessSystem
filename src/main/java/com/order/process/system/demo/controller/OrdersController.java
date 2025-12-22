@@ -1,8 +1,6 @@
 package com.order.process.system.demo.controller;
 
-import com.order.process.system.demo.entity.Order;
 import com.order.process.system.demo.model.*;
-import com.order.process.system.demo.service.InventoryServiceImpl;
 import com.order.process.system.demo.service.OrderServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +8,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+/**
+ * Controller service containing 3 endpoints
+ * 1. CreateOrder - Accepts a CreateOrderRequest that contains a customer ID and a list of items for the order.
+ * 2. getOrderStatus - Accepts an order ID and returns a response with the order details and the current status.
+ * 3. updateOrderStatus - Accepts an order ID and returns 1/3 responses.
+ *      status updated
+ *      Order ID doesn't belong to an order.
+ *      order already has a status of completed
+ */
 
 @RestController
 @RequestMapping("/order")

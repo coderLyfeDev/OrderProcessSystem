@@ -5,6 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Request for an item that is part of an order.
+ * Requires an ID and quantity > 0
+ */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
