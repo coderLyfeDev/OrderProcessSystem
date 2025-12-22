@@ -7,6 +7,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Request to create an order that contains
+ * a customer ID and a list of items.
+ */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

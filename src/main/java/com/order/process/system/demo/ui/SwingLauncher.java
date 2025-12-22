@@ -1,5 +1,6 @@
-package com.order.process.system.demo.ui;
+/*package com.order.process.system.demo.ui;
 
+import com.order.process.system.demo.ui.OrderManagementUI;
 import org.springframework.context.event.EventListener;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.stereotype.Component;
@@ -16,5 +17,5 @@ public class SwingLauncher {
             new OrderManagementUI().setVisible(true); // MainFrame is your Swing JFrame class
         });
     }
-}
+}*/
 

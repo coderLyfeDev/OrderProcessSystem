@@ -2,12 +2,15 @@ package com.order.process.system.demo.events;
 
 import com.order.process.system.demo.entity.Order;
 import com.order.process.system.demo.model.ItemRequest;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.ApplicationEvent;
-
 import java.util.List;
+
+/**
+ * Spring Application even for when an Order is created.
+ * Has two subscribers, InventoryServiceImpl and OrderItemsImpl.
+ */
 
 @Getter
 @Setter

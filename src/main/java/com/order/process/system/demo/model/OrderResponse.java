@@ -1,9 +1,8 @@
 package com.order.process.system.demo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+/**
+ * Interface for other OrderResponse objects
+ */
 
 public interface OrderResponse {
 

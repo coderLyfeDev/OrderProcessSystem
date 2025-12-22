@@ -5,6 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Response for OrderStatus endpoint
+ * Returns an order object with order details
+ * and a message about the status
+ */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

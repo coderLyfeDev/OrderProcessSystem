@@ -9,6 +9,11 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service layer responsible for creating orderItems for an orrder
+ * Subscribes to the CreateOrderEvent so it knows when to create to orderItems.
+ */
+
 @Service
 public class OrderItemServiceImpl implements OrderItemService{
 

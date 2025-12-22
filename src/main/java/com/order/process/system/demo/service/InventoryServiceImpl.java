@@ -8,6 +8,11 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+
+/**
+ * Service layer responsible for creating updating an item's inventory.
+ * Subscribes to the CreateOrderEvent so it knows when to update the inventory.
+ */
 @Service
 public class InventoryServiceImpl implements InventoryServive{
 

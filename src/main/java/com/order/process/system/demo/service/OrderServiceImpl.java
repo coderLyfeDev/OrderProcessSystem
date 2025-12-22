@@ -16,6 +16,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Service layer responsible for
+ * 1. creating orders and publishing an event that
+ * the Inventory and OrderItem service subscribe to.
+ * 2. Checking the Status of an order
+ * 3. Updating the status of an order
+ *
+ */
+
 @Service
 public class OrderServiceImpl implements OrderService{
     @Autowired
