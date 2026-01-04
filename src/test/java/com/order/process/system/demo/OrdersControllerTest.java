@@ -18,15 +18,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -259,7 +254,7 @@ class OrdersControllerTest {
         Long orderId = 1L;
         UpdateStatusResponse response = new UpdateStatusResponse(
                 3,
-                "Order with id: 1 already has a status of DELIVERED"
+                "Order has already been completed for order with ID: 1"
         );
 
         when(orderService.updateOrderStatus(orderId)).thenReturn(response);
@@ -268,7 +263,7 @@ class OrdersControllerTest {
         mockMvc.perform(put("/order/updateStatus/{orderId}", orderId))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value(3))
-                .andExpect(jsonPath("$.message").value("Order with id: 1 already has a status of DELIVERED"));
+                .andExpect(jsonPath("$.message").value("Order has already been completed for order with ID: 1"));
 
         verify(orderService, times(1)).updateOrderStatus(orderId);
     }
